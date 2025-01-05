@@ -22,20 +22,18 @@
         var p = document.getElementById("pid");
         // canvas的宽度是屏幕宽度，限制最大是400
         // 手机360 592
-        var parentWidth = canvas.parentElement.offsetWidth;
-        var parentHeight = canvas.parentElement.offsetHeight;
-        canvas.width = (parentWidth > 400) ? 400 : parentWidth;
-        canvas.width = 300;
+        if (isMobile()) canvas.width = 300; else canvas.width = 450;
         canvas.height = canvas.width * 9 / 5;
-        if(isMobile())window.alert("mobile phone");else window.alert("pc");
 
-        let Xstart = { x: canvas.width / 20, y: 150 };
+
+
+        let Xstart = { x: canvas.width / 20, y: canvas.height / 6 };
         let Xend = { x: canvas.width * 19 / 20, y: Xstart.y };
-        let Ystart = { x: canvas.width / 8, y: 250 };
-        let Yend = { x: Ystart.x, y: 50 };
+        let Ystart = { x: canvas.width / 8, y: canvas.height * 3 / 10 };
+        let Yend = { x: Ystart.x, y: canvas.height / 30 };
         let circ = { x: canvas.width / 2, y: Xstart.y }; // 圆心坐标
-        let arrow = 10; // 箭头大小
-        let r = Math.min(Ystart.y - Xend.y, Xend.y - Yend.y); // 半径
+        let arrow = canvas.width / 40; // 箭头大小
+        let r = canvas.height * 2 / 15; // 半径
 
         // 鼠标拖动功能
         var dragging = false;
@@ -45,9 +43,18 @@
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除画布
+
+            // 绘制分隔线
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height / 3);
+            ctx.lineTo(canvas.width, canvas.height / 3);
+            ctx.moveTo(0, canvas.height * 2 / 3);
+            ctx.lineTo(canvas.width, canvas.height * 2 / 3);
+            ctx.stroke();
+
             ctx.font = "bolder 18px 'Times New Roman'";
             ctx.textAlign = "center";
-            ctx.fillText("请拖动红点以观察不同角度斜面上的应力", canvas.width / 2, 25);
+            ctx.fillText("请拖动红点以观察不同角度斜面上的应力", canvas.width / 2, 20);
             ctx.font = "bolder italic 18px 'Times New Roman'";
             ctx.lineWidth = 2;
             let t = { x: 0, y: 0 }; // 临时变量
