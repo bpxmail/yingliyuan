@@ -7,7 +7,7 @@
     <title>应力圆</title>
     <style>
         canvas {
-            touch-action: none;
+            touch-action: manipulate;
             border: 1px solid black;
         }
     </style>
@@ -39,6 +39,10 @@
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除画布
+            ctx.beginPath();
+        ctx.moveTo(0,80);
+        ctx.lineTo(350,80);
+        ctx.stroke();
             ctx.font = "bolder 20px 'Times New Roman'";
             ctx.fillText("请拖动红点以观察不同角度斜面上的应力", 70, 20);
             ctx.font = "bolder italic 20px 'Times New Roman'";
