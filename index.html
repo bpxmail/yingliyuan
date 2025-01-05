@@ -59,6 +59,8 @@
             drawarrow(Yend, arrow, 90);
             // 绘制坐标轴文字
             ctx.fillText("σ", Xend.x - 10, Xend.y + 20);
+            ctx.fillText("σ1", circ.x + r - 25, Xend.y + 20);
+            ctx.fillText("σ2", circ.x - r + 5, Xend.y + 20);
             ctx.fillText("τ", Yend.x + 10, Yend.y + 10);
             ctx.fillText("2α0", circ.x + r / 2, circ.y - r / 12);
             if (angle != angle0) ctx.fillText("2α", circ.x + r / 4, circ.y - r / 4);
@@ -76,6 +78,14 @@
             ctx.beginPath();
             ctx.arc(0, 0, r / 3, a2r(-angle0), a2r(-angle), true);
             ctx.stroke();
+            // 绘制主应力点
+            ctx.beginPath();
+            ctx.save();
+            ctx.fillStyle = 'blue';
+            ctx.arc(r, 0, 5, 0, 2 * Math.PI);
+            ctx.arc(-r, 0, 5, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.restore();
             // 绘制虚线
             ctx.beginPath();
             ctx.save();
@@ -246,7 +256,7 @@
             // 检查鼠标是否点击在移动点附近
             let dx = event.offsetX - pt.x;
             let dy = event.offsetY - pt.y;
-            if (Math.sqrt(dx * dx + dy * dy) < 30) {
+            if (Math.sqrt(dx * dx + dy * dy) < 15) {
                 dragging = true;
             }
         });
@@ -257,8 +267,6 @@
                 angle = -Math.atan2(event.offsetY - circ.y, event.offsetX - circ.x) * 180 / Math.PI;
                 angle = ((angle - angle0) % 360 + 360) % 360 + angle0;
                 angle = Math.round(angle * 10) / 10;
-                // if (angle - angle0 < 360 && angle - angle0 > 270) angle = angle0;
-                // if (angle - angle0 > 180 && angle - angle0 < 270) angle = angle0 + 180;
                 p.textContent = dragging + ' moving';
             }
             draw(); // 重绘
