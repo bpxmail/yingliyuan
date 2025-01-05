@@ -273,6 +273,12 @@
             p.textContent = dragging + ' leave1';
         });
 
+        canvas.addEventListener('pointerout', (event) => {
+            p.textContent = dragging + ' out0'
+            dragging = false;
+            p.textContent = dragging + ' out1';
+        });
+
         canvas.addEventListener('pointercancel', (event) => {
             p.textContent = dragging + ' cancel0'
             dragging = false;
