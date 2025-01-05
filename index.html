@@ -20,10 +20,12 @@
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
         var p = document.getElementById("pid");
-        // canvas的宽度是屏幕宽度，限制最大是500
+        // canvas的宽度是屏幕宽度，限制最大是400
         var parentWidth = canvas.parentElement.offsetWidth;
+        var parentHeight = canvas.parentElement.offsetHeight;
         canvas.width = (parentWidth > 400) ? 400 : parentWidth;
         canvas.height = canvas.width * 9 / 5;
+        window.alert(parentHeight);
 
         let Xstart = { x: canvas.width / 20, y: 150 };
         let Xend = { x: canvas.width * 19 / 20, y: Xstart.y };
