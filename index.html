@@ -63,7 +63,7 @@
             ctx.fillText("σ2", circ.x - r + 5, Xend.y + 20);
             ctx.fillText("τ", Yend.x + 10, Yend.y + 10);
             ctx.fillText("2α0", circ.x + r / 2, circ.y - r / 12);
-            if (angle != angle0) ctx.fillText("2α", circ.x + r / 4, circ.y - r / 4);
+            if (angle != angle0) ctx.fillText("2α", circ.x + r / 4, circ.y - r / 3);
             // 绘制圆
             ctx.save(); //save1
             ctx.translate(circ.x, circ.y);
@@ -147,9 +147,11 @@
             drawarrow({ x: 0, y: 0 - squl }, arrow, 90);
             drawarrow({ x: 0 + squl, y: 0 }, arrow, 0);
             ctx.rotate(a2r(-angle + angle0) / 2); // 斜面法向量
+            ctx.lineWidth = 1;
             ctx.moveTo(0, 0);
             ctx.lineTo(squl, 0);
             ctx.stroke();
+            ctx.lineWidth = 2;
             drawarrow({ x: squl, y: 0 }, arrow, 0);
             ctx.rotate(a2r(angle - angle0) / 2);
             ctx.fillText("x", squl - 10, + 20);
@@ -184,9 +186,9 @@
             ctx.lineTo(0, 0 + squl * 3 / 4);
             ctx.rotate(a2r(-angle + angle0) / 2);
             ctx.moveTo(0, 0); // 斜面正应力
-            ctx.lineTo(squl * 0.4, 0);
-            ctx.moveTo(10, -squl / 4); // 斜面剪应力
-            ctx.lineTo(10, squl / 4);
+            ctx.lineTo(squl * 0.3 + squl * 0.2 * Math.cos(a2r(angle)), 0);
+            ctx.moveTo(10, -squl / 4 * Math.sin(a2r(angle))); // 斜面剪应力
+            ctx.lineTo(10, squl / 4 * Math.sin(a2r(angle)));
             ctx.rotate(a2r(angle - angle0) / 2);
             ctx.stroke();
             ctx.fillStyle = 'rgb(0,150,150)';
@@ -199,8 +201,9 @@
             drawarrow({ x: 0, y: - squl * 3 / 4 }, arrow, 90);
             drawarrow({ x: 0, y: squl * 3 / 4 }, arrow, -90);
             ctx.rotate(a2r(-angle + angle0) / 2);
-            drawarrow({ x: squl * 0.4, y: 0 }, arrow, 0);
-            drawarrow({ x: 10, y: squl / 4 }, arrow, -90);
+            drawarrow({ x: squl * 0.3 + squl * 0.2 * Math.cos(a2r(angle)), y: 0 }, arrow, 0);
+            drawarrow({ x: 10, y: squl / 4 * Math.sin(a2r(angle)) }, arrow,
+                Math.sign(angle - 180) * 90);
             ctx.rotate(a2r(angle - angle0) / 2);
             ctx.restore();
             // 绘制斜面
@@ -243,14 +246,14 @@
         }
 
         // 自定义点的旋转函数，逆时针旋转为正
-        function rotate(c, pt, angle) {
-            // 转换角度为弧度。由于图像y轴向下，所以添加符号
-            const radians = -angle * Math.PI / 180;
-            // 计算新的坐标
-            const resx = c.x + (pt.x - c.x) * Math.cos(radians) - (pt.y - c.y) * Math.sin(radians);
-            const resy = c.y + (pt.x - c.x) * Math.sin(radians) + (pt.y - c.y) * Math.cos(radians);
-            return { x: resx, y: resy };  // 返回新的坐标点
-        }
+        // function rotate(c, pt, angle) {
+        //     // 转换角度为弧度。由于图像y轴向下，所以添加符号
+        //     const radians = -angle * Math.PI / 180;
+        //     // 计算新的坐标
+        //     const resx = c.x + (pt.x - c.x) * Math.cos(radians) - (pt.y - c.y) * Math.sin(radians);
+        //     const resy = c.y + (pt.x - c.x) * Math.sin(radians) + (pt.y - c.y) * Math.cos(radians);
+        //     return { x: resx, y: resy };  // 返回新的坐标点
+        // }
 
         canvas.addEventListener("pointerdown", function (event) {
             // 检查鼠标是否点击在移动点附近
@@ -265,9 +268,9 @@
             event.preventDefault(); // 防止默认行为
             if (dragging) {
                 angle = -Math.atan2(event.offsetY - circ.y, event.offsetX - circ.x) * 180 / Math.PI;
-                angle = ((angle - angle0) % 360 + 360) % 360 + angle0;
-                angle = Math.round(angle * 10) / 10;
-                p.textContent = dragging + ' moving';
+                // angle = ((angle - angle0) % 360 + 360) % 360 + angle0;
+                angle = Math.round(((angle + 360) % 360) * 10) / 10;
+                p.textContent = angle;
             }
             draw(); // 重绘
         });
