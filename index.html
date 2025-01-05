@@ -14,12 +14,14 @@
 </head>
 
 <body>
-    <canvas id="myCanvas" width="340" height="600">canvas not supported</canvas>
+    <canvas id="myCanvas">canvas not supported</canvas>
     <script>
         var canvas = document.getElementById("myCanvas");
         var context = canvas.getContext("2d");
-        // canvas.width = canvas.offsetWidth;
-        // canvas.height = canvas.offsetHeight; 
+        // canvas的宽度是屏幕宽度，限制最大是500
+        var parentWidth = canvas.parentElement.offsetWidth;
+        canvas.width = (parentWidth > 500) ? 500 : parentWidth;
+        canvas.height = canvas.width * 6 / 5;
         window.alert(canvas.width + " " + canvas.height);
     </script>
 </body>
