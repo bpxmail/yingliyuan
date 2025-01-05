@@ -250,6 +250,7 @@
         });
 
         canvas.addEventListener('pointermove', (event) => {
+            event.preventDefault(); // 防止默认行为
             if (dragging) {
                 angle = -Math.atan2(event.offsetY - circ.y, event.offsetX - circ.x) * 180 / Math.PI;
                 angle = ((angle - angle0) % 360 + 360) % 360 + angle0;
