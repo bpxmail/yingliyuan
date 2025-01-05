@@ -39,8 +39,9 @@
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除画布
+            ctx.font = "bolder 20px 'Times New Roman'";
+            ctx.fillText("请拖动红点以观察不同角度斜面上的应力", 70, 20);
             ctx.font = "bolder italic 20px 'Times New Roman'";
-            ctx.fillText("请拖动红点以观察不同角度斜面上的应力", 100, 20);
             ctx.lineWidth = 2;
 
             // 绘制坐标轴
