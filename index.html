@@ -40,7 +40,7 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除画布
             ctx.font = "bolder 20px 'Times New Roman'";
-            ctx.fillText("请拖动红点以观察不同角度斜面上的应力", 70, 20);
+            ctx.fillText("请拖动红点以观察不同角度斜面上的应力1", 70, 20);
             ctx.font = "bolder italic 20px 'Times New Roman'";
             ctx.lineWidth = 2;
             pt.x = circ.x + r * Math.cos(a2r(angle));
@@ -110,6 +110,7 @@
             ctx.rotate(a2r(-angle));
             ctx.arc(r, 0, 10, 0, 2 * Math.PI);
             if (dragging) { ctx.shadowBlur = 10; ctx.shadowColor = 'navy'; }
+            else ctx.shadowBlur = 0;
             ctx.fill();
             ctx.restore();
             ctx.restore(); //restore1 
