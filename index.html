@@ -14,12 +14,12 @@
 </head>
 
 <body>
-    <canvas id="myCanvas" style="width: 100%; height: 100%">canvas not supported</canvas>
+    <canvas id="myCanvas" width="346" height="600">canvas not supported</canvas>
     <script>
         var canvas = document.getElementById("myCanvas");
         var context = canvas.getContext("2d");
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight; 
+        // canvas.width = canvas.offsetWidth;
+        // canvas.height = canvas.offsetHeight; 
         window.alert(canvas.width + " " + canvas.height);
     </script>
 </body>
