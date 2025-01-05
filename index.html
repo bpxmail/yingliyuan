@@ -259,7 +259,7 @@
                 if (angle - angle0 > 180 && angle - angle0 < 270) angle = angle0 + 180;
             }
             draw(); // 重绘
-            p.textContent = angle - angle0;
+            p.textContent = dragging;//angle - angle0;
         });
 
         canvas.addEventListener('pointerup', (event) => {
