@@ -27,6 +27,7 @@
         let circ = { x: 300, y: Xstart.y }; // 圆心坐标
         let arrow = 10; // 箭头大小
         let r = 100; // 半径
+        let log = 'log';
 
         // 鼠标拖动功能
         var dragging = false;
@@ -34,7 +35,6 @@
         let angle0 = 30;
         let angle = 30;
         let pt = { x: 0, y: 0 }; // 移动点
-        let ptinit = { x: circ.x + r, y: Xend.y }; // 初始点，即圆的最右点
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除画布
@@ -115,7 +115,6 @@
 
             let squl = 180; // 单元体大小
             let squc = { x: canvas.width / 2, y: Xstart.y + 300 };// 单元体中心坐标
-            let ptinit1 = { x: squc.x, y: squc.y - squl * 0.4 };
             // 绘制单元体
             ctx.save(); // save2
             ctx.translate(squc.x, squc.y);
@@ -245,7 +244,7 @@
             // 检查鼠标是否点击在移动点附近
             let dx = event.offsetX - pt.x;
             let dy = event.offsetY - pt.y;
-            if (Math.sqrt(dx * dx + dy * dy) < 100) {
+            if (Math.sqrt(dx * dx + dy * dy) < 30) {
                 dragging = true;
             }
         });
@@ -259,20 +258,25 @@
                 if (angle - angle0 > 180 && angle - angle0 < 270) angle = angle0 + 180;
             }
             draw(); // 重绘
-            p.textContent = dragging;//angle - angle0;
+            p.textContent = dragging + ' moving';
         });
 
         canvas.addEventListener('pointerup', (event) => {
+            p.textContent = dragging + ' up0';
             dragging = false;
+            p.textContent = dragging + ' up1';
         });
 
         canvas.addEventListener('pointerleave', (event) => {
+            p.textContent = dragging + ' leave0'
             dragging = false;
+            p.textContent = dragging + ' leave1';
         });
 
         canvas.addEventListener('pointercancel', (event) => {
+            p.textContent = dragging + ' cancel0'
             dragging = false;
-            window.alert('pointercancel');
+            p.textContent = dragging + ' cancel1';
         });
 
         // 初始化绘制
