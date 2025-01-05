@@ -52,12 +52,13 @@
             ctx.lineTo(canvas.width, canvas.height * 2 / 3);
             ctx.stroke();
 
-            // ctx.font = "bolder 'Times New Roman'";
             if (isMobile()) ctx.font = "bolder 14px 'Times New Roman'";
             else ctx.font = "bolder 18px 'Times New Roman";
             ctx.textAlign = "center";
             ctx.fillText("请拖动红点以观察不同角度斜面上的应力", canvas.width / 2, canvas.height / 40);
-            ctx.font = "bolder italic 18px 'Times New Roman'";
+            // ctx.font = "bolder italic 18px 'Times New Roman'";
+            if(isMobile()) ctx.font = "bolder italic 12px 'Times New Roman'";
+            else ctx.font = "bolder italic 20px 'Times New Roman'";
             ctx.lineWidth = 2;
             let t = { x: 0, y: 0 }; // 临时变量
 
