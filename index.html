@@ -25,7 +25,7 @@
         var parentHeight = canvas.parentElement.offsetHeight;
         canvas.width = (parentWidth > 400) ? 400 : parentWidth;
         canvas.height = canvas.width * 9 / 5;
-        window.alert(parentHeight);
+        window.alert(window.innerWidth+' '+window.innerHeight);
 
         let Xstart = { x: canvas.width / 20, y: 150 };
         let Xend = { x: canvas.width * 19 / 20, y: Xstart.y };
