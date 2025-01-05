@@ -257,8 +257,8 @@
                 angle = -Math.atan2(event.offsetY - circ.y, event.offsetX - circ.x) * 180 / Math.PI;
                 angle = ((angle - angle0) % 360 + 360) % 360 + angle0;
                 angle = Math.round(angle * 10) / 10;
-                if (angle - angle0 < 360 && angle - angle0 > 270) angle = angle0;
-                if (angle - angle0 > 180 && angle - angle0 < 270) angle = angle0 + 180;
+                // if (angle - angle0 < 360 && angle - angle0 > 270) angle = angle0;
+                // if (angle - angle0 > 180 && angle - angle0 < 270) angle = angle0 + 180;
                 p.textContent = dragging + ' moving';
             }
             draw(); // 重绘
