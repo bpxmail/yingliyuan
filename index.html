@@ -107,7 +107,7 @@
             ctx.save();
             ctx.fillStyle = 'red';
             ctx.rotate(a2r(-angle));
-            ctx.arc(r, 0, 5, 0, 2 * Math.PI);
+            ctx.arc(r, 0, 10, 0, 2 * Math.PI);
             if (dragging) { ctx.shadowBlur = 10; ctx.shadowColor = 'navy'; }
             ctx.fill();
             ctx.restore();
@@ -245,7 +245,7 @@
             // 检查鼠标是否点击在移动点附近
             let dx = event.offsetX - pt.x;
             let dy = event.offsetY - pt.y;
-            if (Math.sqrt(dx * dx + dy * dy) < 10) {
+            if (Math.sqrt(dx * dx + dy * dy) < 20) {
                 dragging = true;
             }
         });
