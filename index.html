@@ -21,12 +21,13 @@
         var ctx = canvas.getContext("2d");
         var p = document.getElementById("pid");
         // canvas的宽度是屏幕宽度，限制最大是400
+        // 手机360 592
         var parentWidth = canvas.parentElement.offsetWidth;
         var parentHeight = canvas.parentElement.offsetHeight;
         canvas.width = (parentWidth > 400) ? 400 : parentWidth;
         canvas.width = 300;
         canvas.height = canvas.width * 9 / 5;
-        window.alert(window.innerWidth+' '+window.innerHeight);
+        if(isMobile())window.alert("mobile phone");else window.alert("pc");
 
         let Xstart = { x: canvas.width / 20, y: 150 };
         let Xend = { x: canvas.width * 19 / 20, y: Xstart.y };
@@ -152,6 +153,12 @@
         // 角度转弧度
         function a2r(angle) {
             return angle * Math.PI / 180;
+        }
+
+        // 判断当前设备是否为移动设备
+        function isMobile() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            return /iphone|ipod|android|blackberry|windows phone|mobile/i.test(userAgent);
         }
 
         canvas.addEventListener("pointerdown", function (event) {
