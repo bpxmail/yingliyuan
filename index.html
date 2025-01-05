@@ -40,7 +40,7 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除画布
             ctx.font = "bolder 20px 'Times New Roman'";
-            ctx.fillText("请拖动红点以观察不同角度斜面上的应力", 70, 20);
+            ctx.fillText("请拖动红点以观察不同角度斜面上的应力1", 70, 20);
             ctx.font = "bolder italic 20px 'Times New Roman'";
             ctx.lineWidth = 2;
             pt.x = circ.x + r * Math.cos(a2r(angle));
@@ -265,22 +265,13 @@
         });
 
         canvas.addEventListener('pointerup', (event) => {
-            p.textContent = dragging + ' up0';
             dragging = false;
-            p.textContent = dragging + ' up1';
             draw(); // 重绘
         });
 
         canvas.addEventListener('pointerleave', (event) => {
-            p.textContent = dragging + ' leave0'
             dragging = false;
-            p.textContent = dragging + ' leave1';
-        });
-
-        canvas.addEventListener('pointerout', (event) => {
-            p.textContent = dragging + ' out0'
-            dragging = false;
-            p.textContent = dragging + ' out1';
+            draw(); // 重绘
         });
 
         // 初始化绘制
