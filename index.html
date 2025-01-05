@@ -203,7 +203,7 @@
             ctx.rotate(a2r(-angle + angle0) / 2);
             drawarrow({ x: squl * 0.3 + squl * 0.2 * Math.cos(a2r(angle)), y: 0 }, arrow, 0);
             drawarrow({ x: 10, y: squl / 4 * Math.sin(a2r(angle)) }, arrow,
-                Math.sign(angle - 180) * 90);
+                Math.sign(angle % 360 - 180) * 90);
             ctx.rotate(a2r(angle - angle0) / 2);
             ctx.restore();
             // 绘制斜面
@@ -268,8 +268,7 @@
             event.preventDefault(); // 防止默认行为
             if (dragging) {
                 angle = -Math.atan2(event.offsetY - circ.y, event.offsetX - circ.x) * 180 / Math.PI;
-                // angle = ((angle - angle0) % 360 + 360) % 360 + angle0;
-                angle = Math.round(((angle + 360) % 360) * 10) / 10;
+                angle = ((angle - angle0) % 360 + 360) % 360 + angle0;
                 p.textContent = angle;
             }
             draw(); // 重绘
