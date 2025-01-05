@@ -7,6 +7,7 @@
     <title>应力圆</title>
     <style>
         canvas {
+            touch-action: none;
             border: 1px solid black;
         }
     </style>
@@ -257,9 +258,9 @@
                 angle = Math.round(angle * 10) / 10;
                 if (angle - angle0 < 360 && angle - angle0 > 270) angle = angle0;
                 if (angle - angle0 > 180 && angle - angle0 < 270) angle = angle0 + 180;
+                p.textContent = dragging + ' moving';
             }
             draw(); // 重绘
-            p.textContent = dragging + ' moving';
         });
 
         canvas.addEventListener('pointerup', (event) => {
