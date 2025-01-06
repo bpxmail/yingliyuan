@@ -72,10 +72,10 @@
             drawarrow({ x: ori.x, y: h / 30 }, arrow, 90);
             // 绘制坐标轴文字
             ctx.fillText("σ", w - w / 20 - 10, ori.y + 20);
-            ctx.fillText("σ1", circ.x + r - 20, ori.y + 20);
-            ctx.fillText("σ2", circ.x - r + 15, ori.y + 20);
+            ctx.fillText("σ1", circ.x + r + 20, ori.y + 20);
+            ctx.fillText("σ2", circ.x - r - 15, ori.y + 20);
             ctx.fillText("τ", ori.x + 10, h / 30 + 10);
-            ctx.fillText("2α0", circ.x + r / 2, circ.y - r / 12);
+            ctx.fillText("2α0", circ.x + r / 2, circ.y - r / 20);
             if (angle != angle0) ctx.fillText("2α", circ.x + r / 4, circ.y - r / 3);
             // 绘制圆
             ctx.save(); //save1
