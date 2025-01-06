@@ -138,6 +138,106 @@
             ctx.restore();
             ctx.restore(); //restore1
 
+            let squl = w / 3; // 单元体大小
+            let squc = { x: w / 2, y: h / 2 };// 单元体中心坐标
+            // 绘制单元体
+            ctx.save(); // save2
+            ctx.translate(squc.x, squc.y);
+            ctx.beginPath();
+            ctx.moveTo(- squl / 2, - squl / 2);
+            ctx.lineTo(squl / 2, - squl / 2);
+            ctx.lineTo(+ squl / 2, + squl / 2);
+            ctx.lineTo(- squl / 2, + squl / 2);
+            ctx.closePath();
+            ctx.stroke();
+            // 绘制坐标轴
+            ctx.beginPath
+            ctx.moveTo(0, - squl / 2);
+            ctx.lineTo(0, - squl);
+            ctx.moveTo(squl / 2, 0);
+            ctx.lineTo(squl, 0);
+            ctx.stroke();
+            drawarrow({ x: 0, y: - squl }, arrow, 90);
+            drawarrow({ x: 0 + squl, y: 0 }, arrow, 0);
+            ctx.rotate(a2r(-angle + angle0) / 2); // 斜面法向量
+            ctx.lineWidth = 1;
+            ctx.moveTo(0, 0);
+            ctx.lineTo(squl, 0);
+            ctx.stroke();
+            ctx.lineWidth = 2;
+            drawarrow({ x: squl, y: 0 }, arrow, 0);
+            ctx.rotate(a2r(angle - angle0) / 2);
+            ctx.fillText("x", squl - 10, + 20);
+            ctx.fillText("y", 15, - squl + 10);
+            ctx.fillText("σx", squl * 0.8 - 10, 20);
+            ctx.fillText("σy", 15, - squl * 3 / 4 + 10);
+            ctx.fillText("τxy", squl * 0.8 - 30, 50);
+            ctx.fillText("α", squl - 15, -10);
+            // 绘制圆弧
+            ctx.beginPath();
+            ctx.arc(0, 0, squl * 5 / 6, 0, a2r(angle0 - angle) / 2, true);
+            ctx.stroke();
+            // 绘制单元体应力及箭头
+            ctx.save();
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgb(0,150,150)';
+            ctx.moveTo(- squl / 2 - 10, - squl / 4);
+            ctx.lineTo(- squl / 2 - 10, squl / 4);
+            ctx.moveTo(squl / 2 + 10, - squl / 4);
+            ctx.lineTo(squl / 2 + 10, squl / 4);
+            ctx.moveTo(- squl / 4, - squl / 2 - 10);
+            ctx.lineTo(squl / 4, - squl / 2 - 10);
+            ctx.moveTo(- squl / 4, squl / 2 + 10);
+            ctx.lineTo(squl / 4, squl / 2 + 10);
+            ctx.moveTo(- squl / 2, 0);
+            ctx.lineTo(- squl * 3 / 4, 0);
+            ctx.moveTo(squl / 2, 0);
+            ctx.lineTo(squl * 3 / 4, 0);
+            ctx.moveTo(0, - squl / 2);
+            ctx.lineTo(0, - squl * 3 / 4);
+            ctx.moveTo(0, 0 + squl / 2);
+            ctx.lineTo(0, 0 + squl * 3 / 4);
+            ctx.rotate(a2r(-angle + angle0) / 2);
+            ctx.moveTo(0, 0); // 斜面正应力
+            ctx.lineTo(squl * 0.3 + squl * 0.2 * Math.cos(a2r(angle)), 0);
+            ctx.moveTo(10, -squl / 4 * Math.sin(a2r(angle))); // 斜面剪应力
+            ctx.lineTo(10, squl / 4 * Math.sin(a2r(angle)));
+            ctx.rotate(a2r(angle - angle0) / 2);
+            ctx.stroke();
+            ctx.fillStyle = 'rgb(0,150,150)';
+            drawarrow({ x: - squl / 2 - 10, y: - squl / 4 }, arrow, 90);
+            drawarrow({ x: squl / 2 + 10, y: squl / 4 }, arrow, -90);
+            drawarrow({ x: - squl / 4, y: - squl / 2 - 10 }, arrow, 180);
+            drawarrow({ x: squl / 4, y: squl / 2 + 10 }, arrow, 0);
+            drawarrow({ x: - squl * 3 / 4, y: 0 }, arrow, 180);
+            drawarrow({ x: squl * 3 / 4, y: 0 }, arrow, 0);
+            drawarrow({ x: 0, y: - squl * 3 / 4 }, arrow, 90);
+            drawarrow({ x: 0, y: squl * 3 / 4 }, arrow, -90);
+            ctx.rotate(a2r(-angle + angle0) / 2);
+            drawarrow({ x: squl * 0.3 + squl * 0.2 * Math.cos(a2r(angle)), y: 0 }, arrow, 0);
+            drawarrow({ x: 10, y: squl / 4 * Math.sin(a2r(angle)) }, arrow,
+                Math.sign(angle % 360 - 180) * 90);
+            ctx.rotate(a2r(angle - angle0) / 2);
+            ctx.restore();
+            // 绘制斜面
+            ctx.beginPath();
+            ctx.save();
+            ctx.rotate(a2r(-angle + angle0) / 2);
+            ctx.save();
+            ctx.lineWidth = 4;
+            ctx.moveTo(0, -squl * 0.4); // 斜面
+            ctx.lineTo(0, squl * 0.4);
+            ctx.stroke();
+            ctx.restore();
+            ctx.beginPath(); // 斜面阴影
+            for (let i = -0.38; i < 0.35; i += 0.1) {
+                ctx.moveTo(0, squl * i);
+                ctx.lineTo(-10, squl * i + 10);
+            }
+            ctx.stroke();
+            ctx.restore();
+            ctx.restore(); // restore2
+
 
             p.textContent = w;
         }
