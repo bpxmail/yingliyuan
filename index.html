@@ -20,18 +20,14 @@
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
         var p = document.getElementById("pid");
-        // canvas的宽度是屏幕宽度，限制最大是400
-        // 手机360 592
+        // 在手机上宽度300，在PC上宽度450
         if (isMobile()) canvas.width = 300; else canvas.width = 450;
         canvas.height = canvas.width * 9 / 5;
         let w = canvas.width;
         let h = canvas.height;
 
-        let Xstart = { x: w / 20, y: h / 6 };
-        let Xend = { x: w * 19 / 20, y: Xstart.y };
-        let Ystart = { x: w / 8, y: h * 3 / 10 };
-        let Yend = { x: Ystart.x, y: h / 30 };
-        let circ = { x: w / 2, y: Xstart.y }; // 圆心坐标
+        let ori = { x: w / 8, y: h / 6 }; // 坐标轴原点
+        let circ = { x: w / 2, y: ori.y }; // 圆心坐标
         let arrow = w / 40; // 箭头大小
         let r = h * 2 / 15; // 半径
 
@@ -57,28 +53,28 @@
             ctx.textAlign = "center";
             ctx.fillText("请拖动红点以观察不同角度斜面上的应力", w / 2, h / 40);
             // ctx.font = "bolder italic 18px 'Times New Roman'";
-            if(isMobile()) ctx.font = "bolder italic 12px 'Times New Roman'";
+            if (isMobile()) ctx.font = "bolder italic 12px 'Times New Roman'";
             else ctx.font = "bolder italic 20px 'Times New Roman'";
             ctx.lineWidth = 2;
             let t = { x: 0, y: 0 }; // 临时变量
 
             pt.x = circ.x + r * Math.cos(a2r(angle));
-            pt.y = Xend.y - r * Math.sin(a2r(angle));
+            pt.y = ori.y - r * Math.sin(a2r(angle));
             // 绘制坐标轴
             ctx.beginPath();
-            ctx.moveTo(Xstart.x, Xstart.y);
-            ctx.lineTo(Xend.x, Xend.y);
-            ctx.moveTo(Ystart.x, Ystart.y);
-            ctx.lineTo(Yend.x, Yend.y);
+            ctx.moveTo(w / 20, ori.y);
+            ctx.lineTo(w - w / 20, ori.y);
+            ctx.moveTo(ori.x, h * 3 / 10);
+            ctx.lineTo(ori.x, h / 30);
             ctx.stroke();
             // 绘制箭头
-            drawarrow(Xend, arrow, 0);
-            drawarrow(Yend, arrow, 90);
+            drawarrow({ x: w - w / 20, y: ori.y }, arrow, 0);
+            drawarrow({ x: ori.x, y: h / 30 }, arrow, 90);
             // 绘制坐标轴文字
-            ctx.fillText("σ", Xend.x - 10, Xend.y + 20);
-            ctx.fillText("σ1", circ.x + r - 25, Xend.y + 20);
-            ctx.fillText("σ2", circ.x - r + 5, Xend.y + 20);
-            ctx.fillText("τ", Yend.x + 10, Yend.y + 10);
+            ctx.fillText("σ", w - w / 20 - 10, ori.y + 20);
+            ctx.fillText("σ1", circ.x + r - 20, ori.y + 20);
+            ctx.fillText("σ2", circ.x - r + 15, ori.y + 20);
+            ctx.fillText("τ", ori.x + 10, h / 30 + 10);
             ctx.fillText("2α0", circ.x + r / 2, circ.y - r / 12);
             if (angle != angle0) ctx.fillText("2α", circ.x + r / 4, circ.y - r / 3);
             // 绘制圆
@@ -117,7 +113,7 @@
             ctx.beginPath();
             ctx.save();
             ctx.setLineDash([4, 5]);
-            ctx.moveTo(Yend.x - circ.x, - r * Math.sin(a2r(angle)));
+            ctx.moveTo(ori.x - circ.x, - r * Math.sin(a2r(angle)));
             ctx.lineTo(r * Math.cos(a2r(angle)), - r * Math.sin(a2r(angle)));
             ctx.lineTo(r * Math.cos(a2r(angle)), 0);
             ctx.stroke();
