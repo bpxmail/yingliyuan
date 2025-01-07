@@ -324,7 +324,7 @@
             ctx.restore(); // restore3
 
 
-            p.textContent = 'α = ' + (angle - angle0) / 2;
+            p.textContent = 'α = ' + Math.round((angle - angle0) * 5) / 10;
         }
 
         // 绘制箭头，angle为箭头方向，逆时针为正
