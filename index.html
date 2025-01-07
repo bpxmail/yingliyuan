@@ -28,11 +28,11 @@
     <p> （2）利用应力圆可以方便地求解主应力</p>
     <p> （3）利用应力圆可以快速求解最大剪应力</p>
     <p> 应力圆的方程形式为：</p>
-    <img src=".\images\yingliyuan-1.png" width="281" style="display: block;"/>
+    <img src=".\images\yingliyuan-1.png" width="281" style="display: block;" />
     <p> 倾角为α的斜面上的正应力和剪应力为：</p>
-    <img src=".\images\yingliyuan-2.png" width="303" style="display: block;"/>
+    <img src=".\images\yingliyuan-2.png" width="303" style="display: block;" />
     <p> 主应力和主方向为：</p>
-    <img src=".\images\yingliyuan-3.png" width="243" style="display: block;"/>
+    <img src=".\images\yingliyuan-3.png" width="243" style="display: block;" />
     <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
@@ -324,7 +324,7 @@
             ctx.restore(); // restore3
 
 
-            p.textContent = 'α = ' + angle / 2;
+            p.textContent = 'α = ' + (angle - angle0) / 2;
         }
 
         // 绘制箭头，angle为箭头方向，逆时针为正
