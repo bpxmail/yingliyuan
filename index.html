@@ -10,12 +10,23 @@
             touch-action: none;
             border: 1px solid black;
         }
+
+        p {
+            width: 330px;
+            text-indent: 2em;
+            /* 2em 表示两个字符的宽度 */
+        }
     </style>
 </head>
 
 <body>
     <canvas id="myCanvas">canvas not supported</canvas>
     <p id="pid">α-β-γ-δ-ε-ζ-η-θ-ι-κ-λ-μ-ν-ξ-ο-π-ρ-σ-τ-υ-φ-χ-ψ-ω</p>
+    <p> 应力圆也叫莫尔圆（Mohr's Circle），是一种用于分析平面应力状态的有效工具。
+        可以将平面应力状态下正应力和剪应力的关系用一个圆来表示，直观地展示应力的变化情况。</p>
+    <p> （1）应力圆上的每一个点都代表单元体某一斜截面上的应力状态。</p>
+    <p> （2）利用应力圆可以方便地进行主应力求解</p>
+    <p> （3）利用应力圆可以快速进行最大剪应力求解</p>
     <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
@@ -123,7 +134,7 @@
             ctx.save();
             ctx.fillStyle = 'red';
             ctx.rotate(a2r(-angle));
-            ctx.arc(r, 0, 10, 0, 2 * Math.PI);
+            ctx.arc(r, 0, 5, 0, 2 * Math.PI);
             if (dragging) { ctx.shadowBlur = 10; ctx.shadowColor = 'navy'; }
             else ctx.shadowBlur = 0;
             ctx.fill();
@@ -307,7 +318,7 @@
             ctx.restore(); // restore3
 
 
-            p.textContent = angle;
+            p.textContent = angle / 2;
         }
 
         // 绘制箭头，angle为箭头方向，逆时针为正
