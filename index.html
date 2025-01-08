@@ -366,7 +366,6 @@
                 angle = -Math.atan2(event.offsetY - circ.y, event.offsetX - circ.x) * 180 / Math.PI;
                 angle = ((angle - angle0) % 360 + 360) % 360 + angle0;
                 angle = Math.round(angle * 10) / 10;
-                p.textContent = angle;
             }
             draw(); // 重绘
         });
