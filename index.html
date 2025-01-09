@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1/4桥</title>
+    <title>应力圆</title>
     <style>
         canvas {
             touch-action: none;
@@ -22,54 +22,328 @@
 <body>
     <canvas id="myCanvas">canvas not supported</canvas>
     <p id="pid">α-β-γ-δ-ε-ζ-η-θ-ι-κ-λ-μ-ν-ξ-ο-π-ρ-σ-τ-υ-φ-χ-ψ-ω</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-    <p>1/4桥</p>
-
+    <p> 应力圆也叫莫尔圆（Mohr's Circle），是一种用于分析平面应力状态的有效工具。
+        可以将平面应力状态下正应力和剪应力的关系用一个圆来表示，直观地展示应力的变化情况。</p>
+    <p> （1）应力圆上的每一个点都代表单元体某一斜截面上的应力状态。</p>
+    <p> （2）利用应力圆可以方便地求解主应力</p>
+    <p> （3）利用应力圆可以快速求解最大剪应力</p>
+    <p> 应力圆的方程形式为：</p>
+    <img src=".\images\yingliyuan-1.png" width="281" style="display: block;" />
+    <p> 倾角为α的斜面上的正应力和剪应力为：</p>
+    <img src=".\images\yingliyuan-2.png" width="303" style="display: block;" />
+    <p> 主应力和主方向为：</p>
+    <img src=".\images\yingliyuan-3.png" width="243" style="display: block;" />
     <script>
-        let canvas = document.getElementById("myCanvas");
-        let ctx = canvas.getContext("2d");
-        let p = document.getElementById("pid");
-
-        // 在手机上宽度330，在PC上宽度500
-        // canvas.width = isMobile() ? 330 : 500;
-        // canvas.height = canvas.width * 3 / 5;
-        setsize();
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var p = document.getElementById("pid");
+        // 在手机上宽度300，在PC上宽度450
+        if (isMobile()) canvas.width = 300; else canvas.width = 450;
+        canvas.height = canvas.width * 9 / 5;
         let w = canvas.width;
         let h = canvas.height;
 
-        // 绘制工作通道
-        let workch = new Image();
-        workch.src = "./images/gongzuotongdao.jpg";
-        workch.onload = function () { ctx.drawImage(workch, 20, 20, 200, 200 / 946 * 591); };
+        let ori = { x: w / 8, y: h / 6 }; // 坐标轴原点
+        let circ = { x: w / 2, y: ori.y }; // 圆心坐标
+        let arrow = w / 40; // 箭头大小
+        let r = h * 2 / 15; // 半径
+
+        // 鼠标拖动功能
+        var dragging = false;
+        let angle = 30; // 移动点与横轴夹角
+        let angle0 = 30; // 初始角度
+        let pt = { x: 0, y: 0 }; // 移动点
+
+        function draw() {
+            ctx.clearRect(0, 0, w, h); // 清除画布
+
+            if (isMobile()) ctx.font = "bolder 14px 'Times New Roman'";
+            else ctx.font = "bolder 18px 'Times New Roman";
+            ctx.textAlign = "center";
+            ctx.fillText("请拖动红点以观察不同角度斜面上的应力", w / 2, h / 40);
+            // ctx.font = "bolder italic 18px 'Times New Roman'";
+            if (isMobile()) ctx.font = "bolder italic 12px 'Times New Roman'";
+            else ctx.font = "bolder italic 20px 'Times New Roman'";
+            ctx.lineWidth = 2;
+            let t = { x: 0, y: 0 }; // 临时变量
+
+            pt.x = circ.x + r * Math.cos(a2r(angle));
+            pt.y = ori.y - r * Math.sin(a2r(angle));
+            // 绘制坐标轴
+            ctx.beginPath();
+            ctx.moveTo(w / 20, ori.y);
+            ctx.lineTo(w - w / 20, ori.y);
+            ctx.moveTo(ori.x, h * 3 / 10);
+            ctx.lineTo(ori.x, h / 30);
+            ctx.stroke();
+            // 绘制箭头
+            drawarrow({ x: w - w / 20, y: ori.y }, arrow, 0);
+            drawarrow({ x: ori.x, y: h / 30 }, arrow, 90);
+            // 绘制坐标轴文字
+            ctx.fillText("σ", w - w / 20 - 10, ori.y + 15);
+            ctx.fillText("σ1", circ.x + r + 15, ori.y + 15);
+            ctx.fillText("σ2", circ.x - r - 15, ori.y + 15);
+            ctx.fillText("τ", ori.x + 10, h / 30 + 10);
+            ctx.fillText("2α0", circ.x + r / 2, circ.y - r / 20);
+            if (angle != angle0) ctx.fillText("2α", circ.x + r / 4, circ.y - r / 3);
+            // 绘制圆
+            ctx.save(); //save1
+            ctx.translate(circ.x, circ.y);
+            ctx.beginPath();
+            ctx.arc(0, 0, r, 0, 2 * Math.PI);
+            ctx.stroke();
+            // 绘制圆弧1
+            ctx.beginPath();
+            ctx.arc(0, 0, r / 4, 0, a2r(-angle0), true);
+            ctx.stroke();
+            // 绘制圆弧2
+            ctx.beginPath();
+            ctx.arc(0, 0, r / 3, a2r(-angle0), a2r(-angle), true);
+            ctx.stroke();
+            // 绘制主应力点
+            ctx.beginPath();
+            ctx.save();
+            ctx.fillStyle = 'blue';
+            ctx.arc(r, 0, 5, 0, 2 * Math.PI);
+            ctx.arc(-r, 0, 5, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.restore();
+            // 绘制虚线
+            ctx.beginPath();
+            ctx.save();
+            ctx.strokeStyle = 'green';
+            ctx.setLineDash([6, 6]);
+            ctx.rotate(a2r(-angle0));
+            ctx.moveTo(-r, 0);
+            ctx.lineTo(r, 0);
+            ctx.stroke();
+            ctx.restore();
+            // 绘制移动虚线
+            ctx.beginPath();
+            ctx.save();
+            ctx.setLineDash([4, 5]);
+            ctx.moveTo(ori.x - circ.x, - r * Math.sin(a2r(angle)));
+            ctx.lineTo(r * Math.cos(a2r(angle)), - r * Math.sin(a2r(angle)));
+            ctx.lineTo(r * Math.cos(a2r(angle)), 0);
+            ctx.stroke();
+            ctx.restore();
+            // 绘制半径
+            ctx.beginPath();
+            ctx.save();
+            ctx.rotate(a2r(-angle));
+            ctx.moveTo(0, 0);
+            ctx.lineTo(r, 0);
+            ctx.stroke();
+            ctx.restore();
+            // 绘制移动点
+            ctx.beginPath();
+            ctx.save();
+            ctx.fillStyle = 'red';
+            ctx.rotate(a2r(-angle));
+            ctx.arc(r, 0, 5, 0, 2 * Math.PI);
+            if (dragging) { ctx.shadowBlur = 10; ctx.shadowColor = 'navy'; }
+            else ctx.shadowBlur = 0;
+            ctx.fill();
+            ctx.restore();
+            ctx.restore(); //restore1
+
+            let squl = w / 3; // 单元体大小
+            let squc = { x: w / 2, y: h / 2 };// 单元体中心坐标
+            // 绘制单元体
+            ctx.save(); // save2
+            ctx.translate(squc.x, squc.y);
+            ctx.beginPath();
+            ctx.moveTo(- squl / 2, - squl / 2);
+            ctx.lineTo(squl / 2, - squl / 2);
+            ctx.lineTo(+ squl / 2, + squl / 2);
+            ctx.lineTo(- squl / 2, + squl / 2);
+            ctx.closePath();
+            ctx.stroke();
+            // 绘制坐标轴
+            ctx.beginPath
+            ctx.moveTo(0, - squl / 2);
+            ctx.lineTo(0, - squl);
+            ctx.moveTo(squl / 2, 0);
+            ctx.lineTo(squl, 0);
+            ctx.stroke();
+            drawarrow({ x: 0, y: - squl }, arrow, 90);
+            drawarrow({ x: squl, y: 0 }, arrow, 0);
+            ctx.rotate(a2r(-angle + angle0) / 2); // 斜面法向量
+            ctx.lineWidth = 1;
+            ctx.moveTo(0, 0);
+            ctx.lineTo(squl, 0);
+            ctx.stroke();
+            ctx.lineWidth = 2;
+            drawarrow({ x: squl, y: 0 }, arrow, 0);
+            ctx.rotate(a2r(angle - angle0) / 2);
+            ctx.fillText("x", squl - 10, 15);
+            ctx.fillText("y", 15, - squl + 10);
+            ctx.fillText("σx", squl * 0.8 - 10, 15);
+            ctx.fillText("σy", 15, - squl * 3 / 4 + 10);
+            ctx.fillText("τxy", squl * 0.8 - 30, 50);
+            ctx.fillText("α", squl - 15, -10);
+            // 绘制圆弧
+            ctx.beginPath();
+            ctx.arc(0, 0, squl * 5 / 6, 0, a2r(angle0 - angle) / 2, true);
+            ctx.stroke();
+            // 绘制单元体应力及箭头
+            ctx.save();
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgb(0,150,150)';
+            ctx.moveTo(- squl / 2 - 10, - squl / 4);
+            ctx.lineTo(- squl / 2 - 10, squl / 4);
+            ctx.moveTo(squl / 2 + 10, - squl / 4);
+            ctx.lineTo(squl / 2 + 10, squl / 4);
+            ctx.moveTo(- squl / 4, - squl / 2 - 10);
+            ctx.lineTo(squl / 4, - squl / 2 - 10);
+            ctx.moveTo(- squl / 4, squl / 2 + 10);
+            ctx.lineTo(squl / 4, squl / 2 + 10);
+            ctx.moveTo(- squl / 2, 0);
+            ctx.lineTo(- squl * 3 / 4, 0);
+            ctx.moveTo(squl / 2, 0);
+            ctx.lineTo(squl * 3 / 4, 0);
+            ctx.moveTo(0, - squl / 2);
+            ctx.lineTo(0, - squl * 3 / 4);
+            ctx.moveTo(0, squl / 2);
+            ctx.lineTo(0, squl * 3 / 4);
+            ctx.rotate(a2r(-angle + angle0) / 2);
+            ctx.moveTo(0, 0); // 斜面正应力
+            ctx.lineTo(squl * 0.3 + squl * 0.2 * Math.cos(a2r(angle)), 0);
+            ctx.moveTo(10, -squl / 4 * Math.sin(a2r(angle))); // 斜面剪应力
+            ctx.lineTo(10, squl / 4 * Math.sin(a2r(angle)));
+            ctx.rotate(a2r(angle - angle0) / 2);
+            ctx.stroke();
+            ctx.fillStyle = 'rgb(0,150,150)';
+            drawarrow({ x: - squl / 2 - 10, y: - squl / 4 }, arrow, 90);
+            drawarrow({ x: squl / 2 + 10, y: squl / 4 }, arrow, -90);
+            drawarrow({ x: - squl / 4, y: - squl / 2 - 10 }, arrow, 180);
+            drawarrow({ x: squl / 4, y: squl / 2 + 10 }, arrow, 0);
+            drawarrow({ x: - squl * 3 / 4, y: 0 }, arrow, 180);
+            drawarrow({ x: squl * 3 / 4, y: 0 }, arrow, 0);
+            drawarrow({ x: 0, y: - squl * 3 / 4 }, arrow, 90);
+            drawarrow({ x: 0, y: squl * 3 / 4 }, arrow, -90);
+            ctx.rotate(a2r(-angle + angle0) / 2);
+            drawarrow({ x: squl * 0.3 + squl * 0.2 * Math.cos(a2r(angle)), y: 0 }, arrow, 0);
+            drawarrow({ x: 10, y: squl / 4 * Math.sin(a2r(angle)) }, arrow,
+                Math.sign(angle % 360 - 180) * 90);
+            ctx.rotate(a2r(angle - angle0) / 2);
+            ctx.restore();
+            // 绘制斜面
+            ctx.beginPath();
+            ctx.save();
+            ctx.rotate(a2r(-angle + angle0) / 2);
+            ctx.save();
+            ctx.lineWidth = 4;
+            ctx.moveTo(0, -squl * 0.4); // 斜面
+            ctx.lineTo(0, squl * 0.4);
+            ctx.stroke();
+            ctx.restore();
+            ctx.beginPath(); // 斜面阴影
+            for (let i = -0.38; i < 0.35; i += 0.1) {
+                ctx.moveTo(0, squl * i);
+                ctx.lineTo(-10, squl * i + 10);
+            }
+            ctx.stroke();
+            ctx.restore();
+            ctx.restore(); // restore2
+
+            squc.y = h - h / 6;
+            ctx.save(); // save3
+            ctx.translate(squc.x, squc.y);
+            // 绘制坐标轴
+            ctx.beginPath();
+            ctx.moveTo(0, - squl * 0.7);
+            ctx.lineTo(0, - squl);
+            ctx.moveTo(squl * 0.7, 0);
+            ctx.lineTo(squl, 0);
+            ctx.stroke();
+            drawarrow({ x: 0, y: - squl }, arrow, 90);
+            drawarrow({ x: squl, y: 0 }, arrow, 0);
+            ctx.fillText("x", squl - 10, + 20);
+            ctx.fillText("y", 10, - squl + 10);
+            // 绘制圆弧
+            ctx.beginPath();
+            ctx.arc(0, 0, squl * 5 / 6, 0, a2r(angle0 - angle) / 2, true);
+            ctx.stroke();
+            ctx.fillText("α", squl - 15, -10);
+            // 小正方形的边长
+            squl = w / 5;
+            // 绘制小正方形
+            ctx.rotate(a2r(-angle + angle0) / 2);
+            ctx.beginPath();
+            ctx.moveTo(- squl / 2, - squl / 2);
+            ctx.lineTo(squl / 2, - squl / 2);
+            ctx.lineTo(+ squl / 2, + squl / 2);
+            ctx.lineTo(- squl / 2, + squl / 2);
+            ctx.closePath();
+            ctx.stroke();
+            // 绘制小正方形正应力和剪应力
+            ctx.beginPath();
+            ctx.lineWidth = 1;
+            ctx.moveTo(squl * 1.15, 0);
+            ctx.lineTo(squl * 1.6, 0);
+            ctx.stroke();
+            ctx.lineWidth = 2;
+            ctx.save();
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgb(0,150,150)';
+            ctx.fillStyle = 'rgb(0,150,150)';
+            ctx.moveTo(- squl / 2, 0); // 左边正应力
+            ctx.lineTo(- squl - squl * 0.3 * Math.cos(a2r(angle)), 0);
+            ctx.moveTo(squl / 2, 0); // 右边正应力
+            ctx.lineTo(squl + squl * 0.3 * Math.cos(a2r(angle)), 0);
+            ctx.moveTo(0, - squl / 2); // 上边正应力
+            ctx.lineTo(0, - squl - squl * 0.3 * Math.cos(a2r(angle) + Math.PI));
+            ctx.moveTo(0, squl / 2); // 下边正应力
+            ctx.lineTo(0, squl + squl * 0.3 * Math.cos(a2r(angle) + Math.PI));
+            let shear = squl / 2 * Math.sin(a2r(angle));
+            ctx.moveTo(- squl / 2 - 10, - shear); // 左边剪应力
+            ctx.lineTo(- squl / 2 - 10, shear);
+            ctx.moveTo(squl / 2 + 10, - shear); // 右边剪应力
+            ctx.lineTo(squl / 2 + 10, shear);
+            ctx.moveTo(- shear, - squl / 2 - 10); // 上边剪应力
+            ctx.lineTo(shear, - squl / 2 - 10);
+            ctx.moveTo(- shear, squl / 2 + 10); // 下边剪应力
+            ctx.lineTo(shear, squl / 2 + 10);
+            ctx.stroke();
+            // drawarrow({ x: squl * 0.3 + squl * 0.2 * Math.cos(a2r(angle)), y: 0 }, arrow, 0);
+            // drawarrow({ x: 10, y: squl / 4 * Math.sin(a2r(angle)) }, arrow,
+            //     Math.sign(angle % 360 - 180) * 90);
+            drawarrow({ x: - squl - squl * 0.3 * Math.cos(a2r(angle)), y: 0 }, arrow, 180);
+            drawarrow({ x: squl + squl * 0.3 * Math.cos(a2r(angle)), y: 0 }, arrow, 0);
+            drawarrow({ x: 0, y: - squl - squl * 0.3 * Math.cos(a2r(angle) + Math.PI) }, arrow, 90);
+            drawarrow({ x: 0, y: squl + squl * 0.3 * Math.cos(a2r(angle) + Math.PI) }, arrow, -90);
+            if (Math.abs(shear) > arrow) {
+                drawarrow({ x: - squl / 2 - 10, y: -shear }, arrow, Math.sign(angle % 360 - 180) * (-90));
+                drawarrow({ x: squl / 2 + 10, y: shear }, arrow, Math.sign(angle % 360 - 180) * 90);
+                drawarrow({ x: - shear, y: - squl / 2 - 10 }, arrow, Math.sign(angle % 360 - 180) * 90 - 90);
+                drawarrow({ x: shear, y: squl / 2 + 10 }, arrow, Math.sign(angle % 360 - 180) * 90 + 90);
+            }
+            ctx.restore();
+            ctx.rotate(a2r(angle - angle0) / 2);
+            ctx.restore(); // restore3
 
 
+            p.textContent = 'α = ' + Math.round((angle - angle0) * 5) / 10;
+        }
 
+        // 绘制箭头，angle为箭头方向，逆时针为正
+        function drawarrow(pt, size, angle) {
+            ctx.save();
+            ctx.translate(pt.x, pt.y);
+            ctx.rotate(a2r(-angle)); // 逆时针为正
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-size, -size / 2);
+            ctx.lineTo(-size, size / 2);
+            ctx.fill();
+            ctx.restore();
+        }
 
-
-
-
-        // p.textContent = '竖屏';
-        setsize();
-
-
+        // 角度转弧度
+        function a2r(angle) {
+            return angle * Math.PI / 180;
+        }
 
         // 判断当前设备是否为移动设备
         function isMobile() {
@@ -77,27 +351,37 @@
             return /iphone|ipod|android|blackberry|windows phone|mobile/i.test(userAgent);
         }
 
-        // 根据设备类型设置画布大小
-        function setsize() {
-            if (isMobile() && !isLandscape()) {
-                // 如果是移动设备且为竖屏
-                p.textContent = '竖屏';
-                canvas.width = 330;
+        canvas.addEventListener("pointerdown", function (event) {
+            // 检查鼠标是否点击在移动点附近
+            let dx = event.offsetX - pt.x;
+            let dy = event.offsetY - pt.y;
+            if (Math.sqrt(dx * dx + dy * dy) < 15) {
+                dragging = true;
             }
-            else if(!isMobile() || isLandscape()) {
-                // 如果是移动设备且为横屏，或者是PC
-                p.textContent = '横屏';
-                canvas.width = 500;
+        });
+
+        canvas.addEventListener('pointermove', (event) => {
+            event.preventDefault(); // 防止默认行为
+            if (dragging) {
+                angle = -Math.atan2(event.offsetY - circ.y, event.offsetX - circ.x) * 180 / Math.PI;
+                angle = ((angle - angle0) % 360 + 360) % 360 + angle0;
+                angle = Math.round(angle * 10) / 10;
             }
-            canvas.height = canvas.width * 3 / 5;
-        }
+            draw(); // 重绘
+        });
 
-        // 判断当前设备是否为横屏
-        function isLandscape() {
-            return window.orientation === 90 || window.orientation === -90;
-        }
+        canvas.addEventListener('pointerup', (event) => {
+            dragging = false;
+            draw(); // 重绘
+        });
 
-        window.addEventListener("orientationchange", setsize);
+        canvas.addEventListener('pointerleave', (event) => {
+            dragging = false;
+            draw(); // 重绘
+        });
+
+        draw();
+
     </script>
 </body>
 
