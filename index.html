@@ -76,13 +76,22 @@
             return /iphone|ipod|android|blackberry|windows phone|mobile/i.test(userAgent);
         }
 
+        // 判断当前设备是否为横屏
         function checkOrientation() {
             if(isLandscape()) {
                 p.textContent = "横屏";
             }
             else {
                 p.textContent = "竖屏";
-                // canvas.height = canvas.width * 3 / 5;
+                canvas.width = isMobile() ? 330 : 500;
+                // 如果是移动设备且为竖屏
+                if(isMobile() && !isLandscape()) {
+                    canvas.width = 330;
+                }
+                else {
+                    canvas.width = 800;
+                }
+                canvas.height = canvas.width * 3 / 5;
             }
         }
 
