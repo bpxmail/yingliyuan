@@ -46,12 +46,7 @@
 
 
         // p.textContent = canvas.width;
-        if(isLandscape()) {
-            p.textContent = "横屏";
-        }
-        else {
-            p.textContent = "竖屏";
-        }
+        
 
 
         // 判断当前设备是否为移动设备
@@ -60,10 +55,21 @@
             return /iphone|ipod|android|blackberry|windows phone|mobile/i.test(userAgent);
         }
 
+        function checkOrientation() {
+            if(isLandscape()) {
+                p.textContent = "横屏";
+            }
+            else {
+                p.textContent = "竖屏";
+            }
+        }
+
         // 判断当前设备是否为横屏
         function isLandscape() {
             return window.orientation === 90 || window.orientation === -90;
         }
+
+        window.addEventListener("orientationchange", checkOrientation);
     </script>
 </body>
 
