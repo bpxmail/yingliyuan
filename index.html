@@ -68,7 +68,7 @@
 
         // p.textContent = '竖屏';
         setsize();
-        
+
 
 
         // 判断当前设备是否为移动设备
@@ -79,21 +79,16 @@
 
         // 判断当前设备是否为横屏
         function setsize() {
-            if(isLandscape()) {
-                p.textContent = "横屏";
+            // 如果是移动设备且为竖屏
+            if (isMobile() && !isLandscape()) {
+                p.textContent = '竖屏';
+                canvas.width = 330;
             }
-            else {
-                p.textContent = "竖屏";
-                canvas.width = isMobile() ? 330 : 500;
-                // 如果是移动设备且为竖屏
-                if(isMobile() && !isLandscape()) {
-                    canvas.width = 330;
-                }
-                else {
-                    canvas.width = 800;
-                }
-                canvas.height = canvas.width * 3 / 5;
+            elseif(!isMobile() || isLandscape()) {
+                p.textContent = '横屏1';
+                canvas.width = 800;
             }
+            canvas.height = canvas.width * 3 / 5;
         }
 
         // 判断当前设备是否为横屏
