@@ -43,10 +43,9 @@
         let div1 = document.getElementById("div1");
 
         // 画布大小
-        setsize();
-        let w = canvasbg.width;
-        let h = canvasbg.height;
-        window.alert("w=");
+        let w = 0;
+        let h = 0;
+        initbg();
 
         // 绘制工作通道
         let imgbg = new Image();
@@ -102,8 +101,8 @@
             return window.orientation === 90 || window.orientation === -90;
         }
 
-        // 根据设备类型设置画布大小
-        function setsize() {
+        // 根据设备类型初始化背景画布大小和内容
+        function initbg() {
             if(!isMobile()){
                 canvasbg.width = 500;
                 p.textContent = 'PC-' + canvasbg.width;
@@ -121,10 +120,8 @@
             div1.style.height = canvasbg.height + "px";
             canvasline.width = canvasbg.width;
             canvasline.height = canvasbg.height;
-            // w = canvasbg.width;
-            // h = canvasbg.height;
-            // ctxbg = canvasbg.getContext("2d");
-            // ctxbg.drawImage(imgbg, 0, 0, canvasbg.width, canvasbg.height);
+            w = canvasbg.width;
+            h = canvasbg.height;
 
             // 重新获取上下文
             ctxbg = canvasbg.getContext("2d");
@@ -138,7 +135,7 @@
             };
         }
 
-        window.addEventListener("orientationchange", setsize);
+        window.addEventListener("orientationchange", initbg);
 
         canvasline.addEventListener("pointerdown", function (event) {
             // 检查鼠标是否点击在移动点附近
