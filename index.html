@@ -45,20 +45,7 @@
         // 画布大小
         let w = 0;
         let h = 0;
-        initbg();
-
-        // 绘制工作通道
-        let imgbg = new Image();
-        imgbg.src = "./images/qiaolu1.png";
-        imgbg.onerror = function () {
-            // console.error("Image not found. Please check the path: ./images/qiaolu1.png");
-            window.alert("Image not found. Please check the path: ./images/qiaolu1.png");
-        };
-        imgbg.onload = function () {
-            ctxbg.drawImage(imgbg, 0, 0, w, h);
-            // ctxbg.fillRect(pt1.x - 5, pt1.y - 5, 100, 100); 
-        };
-
+        initbg(); // 初始化背景画布大小和内容
 
         // pt1是工作片左点，pt2是工作片右点
         // pt3是白线补偿片左点，pt4是白线补偿片右点
@@ -71,7 +58,6 @@
         let pt6 = { x: 773 / 833 * w, y: 253 / 788 * h };
         let dragging = false; // 鼠标是否正在拖动
 
-        ctxbg.fillStyle = "rgb(237, 67, 120)";
 
 
         draw();
@@ -103,12 +89,12 @@
 
         // 根据设备类型初始化背景画布大小和内容
         function initbg() {
-            if(!isMobile()){
+            if (!isMobile()) {
                 canvasbg.width = 500;
                 p.textContent = 'PC-' + canvasbg.width;
             }
-            else if(isLandscape()){
-                canvasbg.width = 400;
+            else if (isLandscape()) {
+                canvasbg.width = 300;
                 p.textContent = '横屏-' + canvasbg.width;
             }
             else {
@@ -130,8 +116,12 @@
             // 重新绘制内容
             let imgbg = new Image();
             imgbg.src = "./images/qiaolu1.png";
+            imgbg.onerror = function () {
+                window.alert("Image not found. Please check the path: ./images/qiaolu1.png");
+            };
             imgbg.onload = function () {
                 ctxbg.drawImage(imgbg, 0, 0, canvasbg.width, canvasbg.height);
+                // ctxbg.fillRect(pt1.x - 5, pt1.y - 5, 100, 100);
             };
         }
 
