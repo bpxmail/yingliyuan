@@ -46,13 +46,18 @@
         setsize();
         let w = canvasbg.width;
         let h = canvasbg.height;
+        window.alert("w=");
 
         // 绘制工作通道
         let imgbg = new Image();
         imgbg.src = "./images/qiaolu1.png";
+        imgbg.onerror = function () {
+            // console.error("Image not found. Please check the path: ./images/qiaolu1.png");
+            window.alert("Image not found. Please check the path: ./images/qiaolu1.png");
+        };
         imgbg.onload = function () {
             ctxbg.drawImage(imgbg, 0, 0, w, h);
-            // ctxbg.fillRect(pt1.x - 5, pt1.y - 5, 100, 100);
+            // ctxbg.fillRect(pt1.x - 5, pt1.y - 5, 100, 100); 
         };
 
 
@@ -61,10 +66,10 @@
         // pt5是黑线补偿片左点，pt6是黑线补偿片右点
         let pt1 = { x: 140 / 833 * w, y: 253 / 788 * h };
         let pt2 = { x: 255 / 833 * w, y: 253 / 788 * h };
-        let pt3 = { x: 552/ 833 * w, y: 253/ 788 * h };
-        let pt4 = { x: 633/ 833 * w, y: 253/ 788 * h };
-        let pt5 = { x: 699/ 833 * w, y: 253/ 788 * h };
-        let pt6 = { x: 773/ 833 * w, y: 253 / 788 * h};
+        let pt3 = { x: 773 / 833 * w, y: 253 / 788 * h };
+        let pt4 = { x: 633 / 833 * w, y: 253 / 788 * h };
+        let pt5 = { x: 699 / 833 * w, y: 253 / 788 * h };
+        let pt6 = { x: 773 / 833 * w, y: 253 / 788 * h };
         let dragging = false; // 鼠标是否正在拖动
 
         ctxbg.fillStyle = "rgb(237, 67, 120)";
@@ -99,17 +104,6 @@
 
         // 根据设备类型设置画布大小
         function setsize() {
-            // if (isMobile() && !isLandscape()) {
-            //     // 如果是移动设备且为竖屏
-            //     canvasbg.width = 330;
-            //     p.textContent = '竖屏-' + canvasbg.width;
-
-            // }
-            // else if (!isMobile() || isLandscape()) {
-            //     // 如果是移动设备且为横屏，或者是PC
-            //     canvasbg.width = 500;
-            //     p.textContent = '横屏||PC-' + canvasbg.width;
-            // }
             if(!isMobile()){
                 canvasbg.width = 500;
                 p.textContent = 'PC-' + canvasbg.width;
@@ -127,7 +121,21 @@
             div1.style.height = canvasbg.height + "px";
             canvasline.width = canvasbg.width;
             canvasline.height = canvasbg.height;
-            ctxbg.drawImage(imgbg, 0, 0, w, h);
+            // w = canvasbg.width;
+            // h = canvasbg.height;
+            // ctxbg = canvasbg.getContext("2d");
+            // ctxbg.drawImage(imgbg, 0, 0, canvasbg.width, canvasbg.height);
+
+            // 重新获取上下文
+            ctxbg = canvasbg.getContext("2d");
+            ctxline = canvasline.getContext("2d");
+
+            // 重新绘制内容
+            let imgbg = new Image();
+            imgbg.src = "./images/qiaolu1.png";
+            imgbg.onload = function () {
+                ctxbg.drawImage(imgbg, 0, 0, canvasbg.width, canvasbg.height);
+            };
         }
 
         window.addEventListener("orientationchange", setsize);
