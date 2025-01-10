@@ -46,17 +46,53 @@
         let w = 0;
         let h = 0;
         initbg(); // 初始化背景画布大小和内容
+        let pt0 = { x: 0, y: 0 }; //用于pointermove绘制直线的开始点
+        let pt1 = { x: 0, y: 0 }; //用于pointermove绘制直线的结束点
 
-        // pt1是工作片左点，pt2是工作片右点
-        // pt3是白线补偿片左点，pt4是白线补偿片右点
-        // pt5是黑线补偿片左点，pt6是黑线补偿片右点
-        let pt1 = { x: 140 / 833 * w, y: 253 / 788 * h };
-        let pt2 = { x: 255 / 833 * w, y: 253 / 788 * h };
-        let pt3 = { x: 773 / 833 * w, y: 253 / 788 * h };
-        let pt4 = { x: 633 / 833 * w, y: 253 / 788 * h };
-        let pt5 = { x: 699 / 833 * w, y: 253 / 788 * h };
-        let pt6 = { x: 773 / 833 * w, y: 253 / 788 * h };
+        // 0是工作片左点，1是工作片右点
+        // 2是白线补偿片左点，3是白线补偿片右点
+        // 4是黑线补偿片左点，5是黑线补偿片右点
+        let ptup = Array.from({ length: 6 }, () => ({ x: 0, y: 0 }));
+        ptup[0] = { x: 140 / 833 * w, y: 253 / 788 * h };
+        ptup[1] = { x: 255 / 833 * w, y: 253 / 788 * h };
+        ptup[2] = { x: 551 / 833 * w, y: 253 / 788 * h };
+        ptup[3] = { x: 633 / 833 * w, y: 253 / 788 * h };
+        ptup[4] = { x: 699 / 833 * w, y: 253 / 788 * h };
+        ptup[5] = { x: 773 / 833 * w, y: 253 / 788 * h };
+        let ptdown = [];
+        for (let j = 0; j <= 3; j++) { // 第j个通道
+            ptdown[j] = [];
+            for (let i = 0; i <= 4; i++) { //第i个接线柱
+                ptdown[j][i] = { x: 0, y: 0 };
+            }
+        }
+        // // 11-15是1号工作通道的5个接线点
+        ptdown[0][0] = { x: 140 / 833 * w, y: 432 / 788 * h };
+        ptdown[0][1] = { x: 140 / 833 * w, y: 496 / 788 * h };
+        ptdown[0][2] = { x: 140 / 833 * w, y: 560 / 788 * h };
+        ptdown[0][3] = { x: 140 / 833 * w, y: 624 / 788 * h };
+        ptdown[0][4] = { x: 140 / 833 * w, y: 688 / 788 * h };
+        // 21-25是2号工作通道的5个接线点
+        ptdown[1][0] = { x: 337 / 833 * w, y: 432 / 788 * h };
+        ptdown[1][1] = { x: 337 / 833 * w, y: 496 / 788 * h };
+        ptdown[1][2] = { x: 337 / 833 * w, y: 560 / 788 * h };
+        ptdown[1][3] = { x: 337 / 833 * w, y: 624 / 788 * h };
+        ptdown[1][4] = { x: 337 / 833 * w, y: 688 / 788 * h };
+        // 31-35是3号工作通道的5个接线点
+        ptdown[2][0] = { x: 535 / 833 * w, y: 432 / 788 * h };
+        ptdown[2][1] = { x: 535 / 833 * w, y: 496 / 788 * h };
+        ptdown[2][2] = { x: 535 / 833 * w, y: 560 / 788 * h };
+        ptdown[2][3] = { x: 535 / 833 * w, y: 624 / 788 * h };
+        ptdown[2][4] = { x: 535 / 833 * w, y: 688 / 788 * h };
+        // 41-45是4号补偿通道的5个接线点
+        ptdown[3][0] = { x: 698 / 833 * w, y: 432 / 788 * h };
+        ptdown[3][1] = { x: 698 / 833 * w, y: 496 / 788 * h };
+        ptdown[3][2] = { x: 698 / 833 * w, y: 560 / 788 * h };
+        ptdown[3][3] = { x: 698 / 833 * w, y: 624 / 788 * h };
+        ptdown[3][4] = { x: 698 / 833 * w, y: 688 / 788 * h };
         let dragging = false; // 鼠标是否正在拖动
+
+
 
 
 
@@ -70,10 +106,17 @@
             ctxline.strokeStyle = "rgb(237, 67, 120)";
             ctxline.lineWidth = 2;
             ctxline.beginPath();
-            ctxline.moveTo(pt1.x, pt1.y);
-            ctxline.lineTo(0, 0);
+            ctxline.moveTo(ptdown[0][0].x, ptdown[0][0].y);
+            ctxline.lineTo(ptup[0].x, ptup[0].y);
             ctxline.stroke();
 
+        }
+
+        // 判断点(x, y)是否在pt附近
+        function isptnear(x, y, pt) {
+            let dx = x - pt.x;
+            let dy = y - pt.y;
+            return Math.sqrt(dx * dx + dy * dy) < 10;
         }
 
         // 判断当前设备是否为移动设备
@@ -121,19 +164,47 @@
             };
             imgbg.onload = function () {
                 ctxbg.drawImage(imgbg, 0, 0, canvasbg.width, canvasbg.height);
-                // ctxbg.fillRect(pt1.x - 5, pt1.y - 5, 100, 100);
+                // 初始绘制各个节点
+                ctxbg.fillStyle = "rgb(237, 67, 120)";
+                ctxbg.shadowColor = "rgb(0, 255, 0)";
+                ctxbg.shadowBlur = 10;
+                for (let i = 0; i <= 5; i++) {
+                    ctxbg.beginPath();
+                    ctxbg.arc(ptup[i].x, ptup[i].y, 5, 0, 2 * Math.PI);
+                    ctxbg.fill();
+                }
+                for (let j = 0; j <= 3; j++) {
+                    for (let i = 0; i <= 4; i++) {
+                        ctxbg.beginPath();
+                        ctxbg.arc(ptdown[j][i].x, ptdown[j][i].y, 5, 0, 2 * Math.PI);
+                        ctxbg.fill();
+                    }
+                }
+
             };
         }
 
+        // 监听窗口朝向变化
         window.addEventListener("orientationchange", initbg);
 
         canvasline.addEventListener("pointerdown", function (event) {
-            // 检查鼠标是否点击在移动点附近
-            // let dx = event.offsetX - pt.x;
-            // let dy = event.offsetY - pt.y;
-            // if (Math.sqrt(dx * dx + dy * dy) < 15) {
-            //     dragging = true;
-            // }
+            if(dragging) return;
+            for (let i = 0; i <= 5; i++) {
+                if (isptnear(event.offsetX, event.offsetY, ptup[i])) {
+                    dragging = true;
+                    pt0 = ptup[i];
+                    return;
+                }
+            }
+            for (let j = 0; j <= 3; j++) {
+                for (let i = 0; i <= 4; i++) {
+                    if (isptnear(event.offsetX, event.offsetY, ptdown[j][i])) {
+                        dragging = true;
+                        pt0 = ptdown[j][i];
+                        return;
+                    }
+                }
+            }
         });
 
         canvasline.addEventListener('pointermove', (event) => {
@@ -143,7 +214,17 @@
             //     angle = ((angle - angle0) % 360 + 360) % 360 + angle0;
             //     angle = Math.round(angle * 10) / 10;
             // }
+            
+            ctxline.clearRect(0, 0, w, h);
             draw(); // 重绘
+            ctxline.strokeStyle = "rgb(237, 67, 120)";
+            ctxline.beginPath();
+            ctxline.moveTo(pt0.x, pt0.y);
+            ctxline.lineTo(event.offsetX, event.offsetY);
+            // ctxline.moveTo(0,0);
+            // ctxline.lineTo(100,100);
+            ctxline.stroke();
+            p.textContent = 'x=' + event.offsetX + ', y=' + event.offsetY;
         });
 
         canvaslinea.ddEventListener('pointerup', (event) => {
