@@ -20,7 +20,12 @@
             z-index: 2;
         }
 
-        p {
+        .dingge {
+            width: 330px;
+            text-indent: 0em;
+        }
+
+        .duanluo {
             width: 330px;
             text-indent: 2em;
         }
@@ -33,6 +38,13 @@
         <canvas id="canvasline">canvas not supported</canvas>
     </div>
     <p id="pid">α-β-γ-δ-ε-ζ-η-θ-ι-κ-λ-μ-ν-ξ-ο-π-ρ-σ-τ-υ-φ-χ-ψ-ω</p>
+    <p class="dingge">实验要求：</p>
+    <p class="duanluo">任选1个工作通道，组成1/4桥</p>
+    <p class="dingge">注意事项：</p>
+    <p class="duanluo">1.从工作应变片和补偿片的引出线，向应变仪的接线柱连线</p>
+    <p class="duanluo">2.工作通道的B, B1，补偿通道的D1, D2, D3可根据需要进行连接</p>
+    <p class="duanluo">3.将已连接的线段进行重复连接，即可擦除该线段</p>
+    <p class="duanluo">4.点击“重置”按钮可以消除所有连线，点击“提交”按钮可验证桥路连接是否成功</p>
 
     <script>
         let canvasbg = document.getElementById("canvasbg");
@@ -124,7 +136,7 @@
         function isptnear(x, y, pt) {
             let dx = x - pt.x;
             let dy = y - pt.y;
-            return Math.sqrt(dx * dx + dy * dy) < 10;
+            return Math.sqrt(dx * dx + dy * dy) < 15;
         }
 
         // 判断连线是否允许，上边点索引值为20:20:120，下边点为0:19
@@ -221,9 +233,9 @@
 
             // 重新绘制内容
             let imgbg = new Image();
-            imgbg.src = "./images/qiaolu1.png";
+            imgbg.src = "./images/qiaolu1.jpg";
             imgbg.onerror = function () {
-                window.alert("Image not found. Please check the path: ./images/qiaolu1.png");
+                window.alert("Image not found. Please check the path: ./images/qiaolu1.jpg");
             };
             imgbg.onload = function () {
                 ctxbg.drawImage(imgbg, 0, 0, canvasbg.width, canvasbg.height);
