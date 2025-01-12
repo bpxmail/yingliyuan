@@ -67,12 +67,12 @@
 
         // 上边6个接线点，索引值分别为40, 60, 80, 100, 120, 140
         let ptup = Array.from({ length: 6 }, () => ({ x: 0, y: 0 }));
-        ptup[0] = { x: 140 / 833 * w, y: 253 / 788 * h };
-        ptup[1] = { x: 255 / 833 * w, y: 253 / 788 * h };
-        ptup[2] = { x: 551 / 833 * w, y: 253 / 788 * h };
-        ptup[3] = { x: 633 / 833 * w, y: 253 / 788 * h };
-        ptup[4] = { x: 699 / 833 * w, y: 253 / 788 * h };
-        ptup[5] = { x: 773 / 833 * w, y: 253 / 788 * h };
+        ptup[0] = { x: 46 / 833 * w, y: 268 / 788 * h };
+        ptup[1] = { x: 224 / 833 * w, y: 267 / 788 * h };
+        ptup[2] = { x: 426 / 833 * w, y: 267 / 788 * h };
+        ptup[3] = { x: 595 / 833 * w, y: 302 / 788 * h };
+        ptup[4] = { x: 638 / 833 * w, y: 302 / 788 * h };
+        ptup[5] = { x: 795 / 833 * w, y: 251 / 788 * h };
         for (let i = 0; i < 6; i++) {
             ptup[i].x = Math.round(ptup[i].x);
             ptup[i].y = Math.round(ptup[i].y);
@@ -289,7 +289,7 @@
                 ctxline.stroke();
             }
             // p.textContent = 'x=' + event.offsetX + ', y=' + event.offsetY;
-            p.innerHTML = 'pointer move line length = ' + lines.length;
+            p.innerHTML = ptdown[0].y + '  ' + ptdown[1].y;
         });
 
         canvasline.addEventListener('pointerup', (event) => {
