@@ -50,6 +50,8 @@
         let ptindex = -1; // 已按下的线段第一个点的索引值
         let ptindexbd = [1, 2, 6, 7, 11, 12, 17, 18, 19]; // 下边可以连接的点的索引值，包括所有的B和D
         let lines = []; // 已连接的线段数组，由线段两个点的索引值相加组成
+        // let isupused = [false, false, false, false, false, false]; // 上边的点是否已经连接线段
+        let isupused = Array.from({ length: 6 }, () => (false)); // 上边的点是否已经连接线段
 
         // 上边6个接线点，索引值分别为40, 60, 80, 100, 120, 140
         let ptup = Array.from({ length: 6 }, () => ({ x: 0, y: 0 }));
@@ -280,25 +282,30 @@
 
         canvasline.addEventListener('pointerup', (event) => {
             if (!dragging) return;
+            dragging = false;
             for (let i = 0; i <= 19; i++) {
                 if (isptnear(event.offsetX, event.offsetY, ptdown[i])) {
-                    if (islinelegal(ptindex, i) < 0) { dragging = false; return; } // 线段不合法
-                    for (let i = 0; i < lines.length; i++) {
-                        // 上边的点已经有一条线段了
-                        if (ptindex >= 40 && Math.floor(ptindex / 20) == Math.floor(lines[i] / 20)) {
-                            dragging = false;
-                            return;
-                        }
+                    if (islinelegal(ptindex, i) < 0) return;  // 当前线段不合法
+                    if (ptindex < 20) { // 针对下边的BD点
+                        if (lines.indexOf(ptindex + i) < 0) lines.push(ptindex + i);
+                        else lines.splice(lines.indexOf(ptindex + i), 1);
+                        return;
                     }
-                    dragging = false;
-                    // 如果当前线段不在lines里，则加入到lines里
-                    if (lines.indexOf(ptindex + i) < 0) lines.push(ptindex + i);
-                    // 如果当前线段在lines里，则从lines里删除
-                    else lines.pop(ptindex + i);
-                    return;
+                    // 上边的点还没有占用，当前线段加入lines
+                    if (!isupused[ptindex / 20 - 2]) {
+                        lines.push(ptindex + i);
+                        isupused[ptindex / 20 - 2] = true;
+                    }
+                    // 当前线段在lines里，则从lines里删除
+                    else if (lines.indexOf(ptindex + i) >= 0) {
+                        lines.splice(lines.indexOf(ptindex + i), 1);
+                        isupused[ptindex / 20 - 2] = false;
+                    }
+                    // 上边的点已经占用
+                    else
+                        return;
                 }
             }
-            dragging = false;
             // draw(); // 重绘
         });
 
