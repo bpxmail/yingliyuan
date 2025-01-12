@@ -37,6 +37,9 @@
         <canvas id="canvasbg">canvas not supported</canvas>
         <canvas id="canvasline">canvas not supported</canvas>
     </div>
+    <br>
+    <button id="resetbtn">重置</button>
+    <button id="submitbtn">提交</button>
     <p id="pid">α-β-γ-δ-ε-ζ-η-θ-ι-κ-λ-μ-ν-ξ-ο-π-ρ-σ-τ-υ-φ-χ-ψ-ω</p>
     <p class="dingge">实验要求：</p>
     <p class="duanluo">任选1个工作通道，组成1/4桥</p>
@@ -194,6 +197,65 @@
             }
         }
 
+        // 重置按钮的点击事件处理函数
+        document.getElementById("resetbtn").addEventListener("click", function () {
+            lines = []; // 清空所有连线
+            isupused = [false, false, false, false, false, false];
+            ctxline.clearRect(0, 0, w, h); // 清空画布
+            draw(); // 重新绘制
+        });
+
+        // 提交按钮的点击事件处理函数
+        document.getElementById("submitbtn").addEventListener("click", function () {
+            // 必须有6根连线
+            if (lines.length > 6) { alert('连线数量冗余或不足，请修改！'); return; }
+            // 必须连接D1D2
+            if (lines.indexOf(35) < 0) { alert('补偿通道连接错误，请修改！'); return; }
+            // 对lines从小到大排序
+            lines = lines.sort((a, b) => a - b);
+            p.innerHTML = lines[0] + ' ' + lines[1] + ' ' + lines[2] + ' ' +
+                lines[3] + ' ' + lines[4] + ' ' + lines[5];
+            let a0, a1, b0, b1, c0, c1, d0, d1, e0, e1, f0, f1;
+            f1 = lines[5] % 20;
+            f0 = lines[5] - f1;
+            e1 = lines[4] % 20;
+            e0 = lines[4] - e1;
+            // lines必须同时包含140,120或100,80
+            if ((f0 != 100 && f0 != 140) || (e0 != 80 && e0 != 120)) {
+                alert('补偿片连接错误，请修改！');
+                return;
+            }
+            if ((f0 == 140 && e0 != 120) || (f0 == 100 && e0 != 80)) {
+                alert('补偿片连接错误，请修改！');
+                return;
+            }
+            if (lines[0] > 23) { alert('工作片连接错误，请修改！'); return; }
+            if (lines[1] != 35) { alert('补偿通道连接错误，请修改！'); return; }
+            a0 = 0;
+            a1 = lines[0];
+            if (a1 != 3 && a1 != 13 && a1 != 23) { alert('工作片连接错误，请修改！'); return; }
+            c1 = lines[2] % 20;
+            c0 = lines[2] - c1;
+            d1 = lines[3] % 20;
+            d0 = lines[3] - d1;
+            if (c0 != 40 || d0 != 60) { alert('工作片连接错误，请修改！'); return; }
+            let flag = false;
+            if (a1 == 3) {
+                if ((c1 == 0 && d1 == 1) || (c1 == 1 && d1 == 0)) flag = true;
+                if ((c1 == 0 && d1 == 2) || (c1 == 2 && d1 == 0)) flag = true;
+            }
+            if (a1 == 13) {
+                if ((c1 == 5 && d1 == 6) || (c1 == 6 && d1 == 5)) flag = true;
+                if ((c1 == 5 && d1 == 7) || (c1 == 7 && d1 == 5)) flag = true;
+            }
+            if (a1 == 23) {
+                if ((c1 == 10 && d1 == 11) || (c1 == 11 && d1 == 10)) flag = true;
+                if ((c1 == 10 && d1 == 12) || (c1 == 12 && d1 == 10)) flag = true;
+            }
+            if (!flag) { alert('工作片连接错误，请修改！'); return; }
+            alert('您选择了' + (a1 + 7) / 10 + '号通道，1/4桥连接正确！');
+        });
+
         // 判断当前设备是否为移动设备
         function isMobile() {
             const userAgent = navigator.userAgent.toLowerCase();
@@ -289,7 +351,8 @@
                 ctxline.stroke();
             }
             // p.textContent = 'x=' + event.offsetX + ', y=' + event.offsetY;
-            p.innerHTML = ptdown[0].y + '  ' + ptdown[1].y;
+            p.innerHTML = lines[0] + ' ' + lines[1] + ' ' + lines[2] + ' ' +
+                lines[3] + ' ' + lines[4] + ' ' + lines[5];
         });
 
         canvasline.addEventListener('pointerup', (event) => {
