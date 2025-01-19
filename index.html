@@ -39,15 +39,19 @@
     </div>
     <br>
     <button id="resetbtn">重置</button>
-    <button id="submitbtn">提交</button>
+    <button id="validbtn">验证</button>
     <p id="pid">α-β-γ-δ-ε-ζ-η-θ-ι-κ-λ-μ-ν-ξ-ο-π-ρ-σ-τ-υ-φ-χ-ψ-ω</p>
-    <p class="dingge">实验要求：</p>
+    <p class="dingge"><strong>实验要求：</strong></p>
     <p class="duanluo">任选1个工作通道，组成1/4桥</p>
-    <p class="dingge">注意事项：</p>
+    <p class="dingge"><strong>注意事项：</strong></p>
     <p class="duanluo">1.从工作应变片和补偿片的引出线，向应变仪的接线柱连线</p>
     <p class="duanluo">2.工作通道的B, B1，补偿通道的D1, D2, D3可根据需要进行连接</p>
     <p class="duanluo">3.将已连接的线段进行重复连接，即可擦除该线段</p>
     <p class="duanluo">4.点击“重置”按钮可以消除所有连线，点击“提交”按钮可验证桥路连接是否成功</p>
+    <p class="dingge"><strong>应变仪实物图：</strong></p>
+    <img id = "yingbianyi" src="./images/yingbianyi.jpg" alt="应变仪实物图">
+    <p class="dingge"><strong>桥路连接方法图：</strong></p>
+    <img id = "qiaolutu" src="./images/qiaolutu.jpg" alt="桥路连接方法图">
 
     <script>
         let canvasbg = document.getElementById("canvasbg");
@@ -67,6 +71,10 @@
         let lines = []; // 已连接的线段数组，由线段两个点的索引值相加组成
         // let isupused = [false, false, false, false, false, false]; // 上边的点是否已经连接线段
         let isupused = Array.from({ length: 6 }, () => (false)); // 上边的点是否已经连接线段
+        let imgyingbianyi = document.getElementById("yingbianyi");
+        imgyingbianyi.style.width = canvasbg.width + 'px';
+        let imgqiaolutu = document.getElementById("qiaolutu");
+        imgqiaolutu.style.width = canvasbg.width + 'px';
 
         // 上边6个接线点，索引值分别为40, 60, 80, 100, 120, 140
         let ptup = Array.from({ length: 6 }, () => ({ x: 0, y: 0 }));
@@ -206,7 +214,7 @@
         });
 
         // 提交按钮的点击事件处理函数
-        document.getElementById("submitbtn").addEventListener("click", function () {
+        document.getElementById("validbtn").addEventListener("click", function () {
             // 必须有6根连线
             if (lines.length > 6) { alert('连线数量冗余或不足，请修改！'); return; }
             // 必须连接D1D2
